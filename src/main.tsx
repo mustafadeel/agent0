@@ -13,6 +13,7 @@ const root = ReactDOM.createRoot(
 
 const auth0Domain = import.meta.env.AUTH0_DOMAIN;
 const auth0ClientId = import.meta.env.AUTH0_CLIENT_ID;
+const auth0Audience = import.meta.env.AUTH0_AUDIENCE;
 
 root.render(
   <React.StrictMode>
@@ -25,6 +26,7 @@ root.render(
           clientId={auth0ClientId}
           authorizationParams={{
             redirect_uri: window.location.origin,
+            audience: auth0Audience,
           }}
         >
           <ChakraProvider theme={theme}>

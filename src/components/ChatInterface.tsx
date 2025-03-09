@@ -5,14 +5,16 @@ import {
   Flex,
   Heading,
   IconButton,
-  Text,
 } from "@chakra-ui/react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import { MoonIcon, SunIcon, UserIcon } from "lucide-react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import { Message } from "@/types";
+import { useRef, useEffect } from "react";
+import { useChatInterfaceStyles } from "../styles/ChatInterfaceStyles";
 
 type ChatInterfaceProps = {
   messages: Message[];
@@ -31,9 +33,21 @@ function ChatInterface({
 }: ChatInterfaceProps) {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
+  const chatInputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const styles = useChatInterfaceStyles();
+
+  const handleSendMessageWrapper = async (message: string) => {
+    await handleSendMessage(message);
+    chatInputRef.current?.focus();
+  };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
-    <Container maxW="container.md" h="100vh" p={4}>
+    <Container {...styles.container}>
       <Flex direction="column" h="full">
         <Flex justifyContent="space-between" alignItems="center" mb={6}>
           <Heading size="lg">Agent0</Heading>
@@ -49,7 +63,7 @@ function ChatInterface({
               }
               onClick={toggleColorMode}
               variant="ghost"
-              _hover={{ bg: colorMode === "light" ? "gray.100" : "gray.700" }}
+              _hover={styles.iconButtonHover}
             />
             {isAuthenticated ? (
               <Button
@@ -64,54 +78,21 @@ function ChatInterface({
             )}
           </Flex>
         </Flex>
-
-        <Box
-          flex="1"
-          overflowY="auto"
-          borderRadius="md"
-          bg={colorMode === "light" ? "gray.50" : "gray.700"}
-          p={4}
-          mb={4}
-          sx={{
-            "&::-webkit-scrollbar": {
-              width: "8px",
-            },
-            "&::-webkit-scrollbar-track": {
-              width: "10px",
-              background:
-                colorMode === "light"
-                  ? "rgba(0,0,0,0.05)"
-                  : "rgba(255,255,255,0.05)",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background:
-                colorMode === "light"
-                  ? "rgba(0,0,0,0.2)"
-                  : "rgba(255,255,255,0.2)",
-              borderRadius: "24px",
-            },
-          }}
-        >
+        <Box {...styles.box}>
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
-
+          <div ref={messagesEndRef} />
           {isLoading && (
             <Flex justifyContent="flex-start" mb={4}>
-              <Box
-                maxW="80%"
-                bg={colorMode === "light" ? "blue.500" : "blue.200"}
-                color={colorMode === "light" ? "white" : "gray.800"}
-                p={3}
-                borderRadius="lg"
-              >
-                <Text>Thinking...</Text>
+              <Box {...styles.thinkingBox}>
+                <ReactMarkdown>Thinking...</ReactMarkdown>
               </Box>
             </Flex>
           )}
         </Box>
 
-        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+        <ChatInput ref={chatInputRef} onSendMessage={handleSendMessageWrapper} isLoading={isLoading} />
       </Flex>
     </Container>
   );

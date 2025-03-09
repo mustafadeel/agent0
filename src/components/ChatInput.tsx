@@ -1,82 +1,75 @@
-import type React from "react";
-
-import { useState } from "react";
 import {
   Button,
   Flex,
   Input,
   InputGroup,
   InputRightElement,
-  useColorMode,
   Icon,
 } from "@chakra-ui/react";
 import { SendIcon } from "lucide-react";
-
 import { useAuth0 } from "@auth0/auth0-react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { useChatInputStyles } from "../styles/ChatInputStyles";
+
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   isLoading: boolean;
 }
 
-export default function ChatInput({
-  onSendMessage,
-  isLoading,
-}: ChatInputProps) {
-  const [message, setMessage] = useState("");
-  const { colorMode } = useColorMode();
+const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
+  ({ onSendMessage, isLoading }, ref) => {
+    const [message, setMessage] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
+    const { isAuthenticated } = useAuth0();
+    const styles = useChatInputStyles();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (message.trim() && !isLoading) {
-      onSendMessage(message);
-      setMessage("");
-    }
-  };
+    useImperativeHandle(ref, () => ({
+      ...(inputRef.current as HTMLInputElement),
+      focus: () => {
+        inputRef.current?.focus();
+      },
+    }));
 
-  const { isAuthenticated } = useAuth0();
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (message.trim() && !isLoading) {
+        onSendMessage(message);
+        setMessage("");
+      }
+    };
 
-  return (
-    <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-      <Flex>
-        <InputGroup size="md">
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={
-              isAuthenticated
-                ? "Type your message..."
-                : "Login required to interact with Agent0"
-            }
-            pr="4.5rem"
-            bg={colorMode === "light" ? "white" : "gray.700"}
-            borderColor={colorMode === "light" ? "gray.300" : "gray.600"}
-            _hover={{
-              borderColor: colorMode === "light" ? "blue.500" : "blue.300",
-            }}
-            _focus={{
-              borderColor: colorMode === "light" ? "blue.500" : "blue.300",
-              boxShadow: `0 0 0 1px ${
-                colorMode === "light" ? "blue.500" : "blue.300"
-              }`,
-            }}
-            disabled={isLoading}
-          />
-          <InputRightElement width="4.5rem">
-            <Button
-              h="1.75rem"
-              size="sm"
-              type="submit"
-              colorScheme="blue"
-              isLoading={isLoading}
-              disabled={!message.trim() || isLoading}
-              aria-label="Send message"
-            >
-              <Icon as={SendIcon} boxSize={4} />
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </Flex>
-    </form>
-  );
-}
+    return (
+      <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <Flex>
+          <InputGroup size="md">
+            <Input
+              ref={inputRef}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={
+                isAuthenticated
+                  ? "Type your message..."
+                  : "Login required to interact with Agent0"
+              }
+              {...styles.input}
+              disabled={isLoading || !isAuthenticated}
+            />
+            <InputRightElement width="4.5rem">
+              <Button
+                type= "submit"
+                {...styles.button}
+                isLoading={isLoading}
+                disabled={!isAuthenticated}
+              >
+                <Icon as={SendIcon} />
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </Flex>
+      </form>
+    );
+  }
+);
+
+export default ChatInput;

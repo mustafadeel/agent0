@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
 import { useAuth0 } from "@auth0/auth0-react";
 import ChatInterface from "./components/ChatInterface";
-
 import Profile from "./components/Profile";
 
 // Define message type
@@ -14,6 +13,9 @@ type Message = {
 };
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { colorMode, toggleColorMode } = useColorMode();
+  const { loginWithRedirect, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -21,9 +23,6 @@ function App() {
       role: "assistant",
     },
   ]);
-  const [isLoading, setIsLoading] = useState(false);
-  const { colorMode, toggleColorMode } = useColorMode();
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
 
   const handleSendMessage = async (message: string) => {
     if (!isAuthenticated) {
@@ -44,13 +43,16 @@ function App() {
     setIsLoading(true);
 
     try {
-      // Send message to your Python backend
+      const token = await getAccessTokenSilently({
+      });
+
       const response = await fetch(
-        `${import.meta.env.VITE_AGENT0_API}/api/chat`,
+        `${import.meta.env.AUTH0_API_HOST}/chat`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify({
             messages: [...messages, userMessage].map(({ content, role }) => ({

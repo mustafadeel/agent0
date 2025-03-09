@@ -20,12 +20,7 @@ import {
 } from "@chakra-ui/react";
 import {
   ChromeIcon as GoogleIcon,
-  ComputerIcon as MicrosoftIcon,
-  SlackIcon,
-  PodcastIcon as SpotifyIcon,
   GithubIcon,
-  TwitterIcon,
-  FacebookIcon,
   LinkIcon,
   UnlinkIcon,
 } from "lucide-react";
@@ -33,12 +28,7 @@ import {
 // Define available social connections
 const socialConnections = [
   { id: "google-oauth2", name: "Google", icon: GoogleIcon, color: "#DB4437" },
-  { id: "microsoft", name: "Microsoft", icon: MicrosoftIcon, color: "#00A4EF" },
-  { id: "slack", name: "Slack", icon: SlackIcon, color: "#4A154B" },
-  { id: "spotify", name: "Spotify", icon: SpotifyIcon, color: "#1DB954" },
   { id: "github", name: "GitHub", icon: GithubIcon, color: "#333" },
-  { id: "twitter", name: "Twitter", icon: TwitterIcon, color: "#1DA1F2" },
-  { id: "facebook", name: "Facebook", icon: FacebookIcon, color: "#4267B2" },
 ];
 
 interface Identity {
