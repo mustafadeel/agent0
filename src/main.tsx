@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 
 const auth0Domain = import.meta.env.AUTH0_DOMAIN;
 const auth0ClientId = import.meta.env.AUTH0_CLIENT_ID;
-const auth0Audience = import.meta.env.AUTH0_AUDIENCE;
+const auth0Audience = import.meta.env.AUTH0_API_AUDIENCE;
 
 root.render(
   <React.StrictMode>
@@ -28,6 +28,7 @@ root.render(
             redirect_uri: window.location.origin,
             audience: auth0Audience,
           }}
+          cacheLocation="localstorage"
         >
           <ChakraProvider theme={theme}>
             <ColorModeScript initialColorMode={theme.config.initialColorMode} />

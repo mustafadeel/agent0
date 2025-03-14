@@ -7,7 +7,7 @@ export const Auth0ConfigError = () => (
     </p>
     <p>
       <a
-        href="https://auth0.com/docs/quickstart/spa/react/01-login#configure-auth0"
+        href="https://auth0.com/ai/docs#user-authentication"
         target="_blank"
         rel="noopener noreferrer"
       >

@@ -19,7 +19,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "Hello! How can I help you today?",
+      content: "Hello! I am an AI assistant, designed to demonstrate First Party API calls for AI agents with Auth0. Ask me about yourself.",
       role: "assistant",
     },
   ]);
