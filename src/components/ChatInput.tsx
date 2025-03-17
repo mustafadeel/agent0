@@ -7,10 +7,8 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { SendIcon } from "lucide-react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { useChatInputStyles } from "../styles/ChatInputStyles";
-
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -21,7 +19,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
   ({ onSendMessage, isLoading }, ref) => {
     const [message, setMessage] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
-    const { isAuthenticated } = useAuth0();
+    const isAuthenticated = false;
     const styles = useChatInputStyles();
 
     useImperativeHandle(ref, () => ({
@@ -57,7 +55,6 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
             />
             <InputRightElement width="4.5rem">
               <Button
-                type= "submit"
                 {...styles.button}
                 isLoading={isLoading}
                 disabled={!isAuthenticated}

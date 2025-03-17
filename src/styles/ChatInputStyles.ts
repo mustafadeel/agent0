@@ -21,7 +21,6 @@ export const useChatInputStyles = () => {
     button: {
       h: "1.75rem",
       size: "sm",
-      type: "submit",
       colorScheme: "blue",
     },
   };

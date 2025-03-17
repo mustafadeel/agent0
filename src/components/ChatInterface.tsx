@@ -31,8 +31,8 @@ function ChatInterface({
   toggleColorMode,
   handleSendMessage,
 }: ChatInterfaceProps) {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
-  const navigate = useNavigate();
+  // const { loginWithRedirect, isAuthenticated } = useAuth0();
+  // const navigate = useNavigate();
   const chatInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const styles = useChatInterfaceStyles();
@@ -65,7 +65,7 @@ function ChatInterface({
               variant="ghost"
               _hover={styles.iconButtonHover}
             />
-            {isAuthenticated ? (
+            {/* {isAuthenticated ? (
               <Button
                 leftIcon={<UserIcon size={20} />}
                 onClick={() => navigate("/profile")}
@@ -75,7 +75,7 @@ function ChatInterface({
               </Button>
             ) : (
               <Button onClick={() => loginWithRedirect()}>Log In</Button>
-            )}
+            )} */}
           </Flex>
         </Flex>
         <Box {...styles.box}>
@@ -92,7 +92,11 @@ function ChatInterface({
           )}
         </Box>
 
-        <ChatInput ref={chatInputRef} onSendMessage={handleSendMessageWrapper} isLoading={isLoading} />
+        <ChatInput
+          ref={chatInputRef}
+          onSendMessage={handleSendMessageWrapper}
+          isLoading={isLoading}
+        />
       </Flex>
     </Container>
   );
