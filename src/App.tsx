@@ -15,7 +15,9 @@ type Message = {
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const { colorMode, toggleColorMode } = useColorMode();
-  const { loginWithRedirect, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  
+  // TODO: Add getAccessTokenSilently function
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -32,7 +34,6 @@ function App() {
 
     if (!message.trim()) return;
 
-    // Add user message to chat
     const userMessage: Message = {
       id: Date.now().toString(),
       content: message,
@@ -42,55 +43,8 @@ function App() {
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    try {
-      const token = await getAccessTokenSilently({
-      });
+    // TODO: Add API call to /agent endpoint with an Access Token
 
-      const response = await fetch(
-        `${import.meta.env.AUTH0_API_HOST}/chat`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            messages: [...messages, userMessage].map(({ content, role }) => ({
-              content,
-              role,
-            })),
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to send message");
-      }
-
-      const data = await response.json();
-
-      // Add AI response to chat
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: data.response,
-        role: "assistant",
-      };
-
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      console.error("Error sending message:", error);
-
-      // Add error message
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: "Sorry, I encountered an error. Please try again.",
-        role: "assistant",
-      };
-
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (

@@ -15,8 +15,7 @@ import {
 
 
 export default function Profile() {
-  const { user, isAuthenticated, isLoading, logout } =
-    useAuth0();
+  const { user, isAuthenticated, isLoading, logout } = useAuth0();
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
 
