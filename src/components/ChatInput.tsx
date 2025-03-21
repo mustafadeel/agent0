@@ -57,7 +57,6 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
             />
             <InputRightElement width="4.5rem">
               <Button
-                type= "submit"
                 {...styles.button}
                 isLoading={isLoading}
                 disabled={!isAuthenticated}
