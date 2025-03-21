@@ -60,6 +60,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
                 {...styles.button}
                 isLoading={isLoading}
                 disabled={!isAuthenticated}
+                type="submit"
               >
                 <Icon as={SendIcon} />
               </Button>
