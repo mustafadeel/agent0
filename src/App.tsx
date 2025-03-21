@@ -47,7 +47,7 @@ function App() {
       });
 
       const response = await fetch(
-        `${import.meta.env.AUTH0_API_HOST}/chat`,
+        `${import.meta.env.AUTH0_API_HOST}/agent`,
         {
           method: "POST",
           headers: {
